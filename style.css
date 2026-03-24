@@ -1,0 +1,54 @@
+:root {
+  --bg: #05070d;
+  --panel: #0c1220;
+  --line: #8bd3ff;
+  --text: #e8f3ff;
+  --danger: #ff7070;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Courier New", Courier, monospace;
+  background: radial-gradient(circle at top, #101a30, var(--bg) 60%);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+}
+
+.game-layout {
+  width: min(95vw, 980px);
+  text-align: center;
+  padding: 1rem;
+}
+
+h1 {
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.subtitle,
+.hint {
+  opacity: 0.9;
+  margin: 0.4rem 0 1rem;
+  font-size: 0.95rem;
+}
+
+canvas {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #090f1c 0%, #04070f 100%);
+  box-shadow: 0 0 24px rgba(139, 211, 255, 0.25);
+}
+
+strong {
+  color: var(--danger);
+}
