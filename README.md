@@ -41,6 +41,7 @@ http://localhost:8080
 - **Pfeil links / rechts**: Schiff rotieren
 - **Pfeil hoch**: Schub
 - **Leertaste**: Schießen
+- **Pause-Button** über dem Spielfeld: Spiel pausieren/fortsetzen
 - **R** (bei Game Over): Spiel neu starten
 
 ## Projektstruktur

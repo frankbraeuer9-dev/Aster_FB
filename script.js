@@ -11,6 +11,7 @@
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const pauseButton = document.getElementById("pauseButton");
 
 const CONFIG = {
   ship: {
@@ -58,6 +59,7 @@ const state = {
   lives: CONFIG.game.startLives,
   wave: 1,
   gameOver: false,
+  paused: false,
   shootCooldown: 0,
   flashTimer: 0,
   muzzleTimer: 0,
@@ -152,10 +154,23 @@ function resetGame() {
   state.lives = CONFIG.game.startLives;
   state.wave = 1;
   state.gameOver = false;
+  state.paused = false;
   state.shootCooldown = 0;
   state.flashTimer = 0;
   state.muzzleTimer = 0;
+  syncPauseButton();
   spawnWave(CONFIG.asteroid.spawnCount);
+}
+
+function syncPauseButton() {
+  pauseButton.textContent = state.paused ? "Fortsetzen" : "Pause";
+  pauseButton.setAttribute("aria-pressed", String(state.paused));
+}
+
+function togglePause() {
+  if (state.gameOver) return;
+  state.paused = !state.paused;
+  syncPauseButton();
 }
 
 function onKey(event, isDown) {
@@ -171,6 +186,7 @@ function onKey(event, isDown) {
 
 window.addEventListener("keydown", (e) => onKey(e, true));
 window.addEventListener("keyup", (e) => onKey(e, false));
+pauseButton.addEventListener("click", togglePause);
 
 function shootBullet() {
   const { ship } = state;
@@ -316,7 +332,7 @@ function handleCollisions() {
 }
 
 function update(dt) {
-  if (state.gameOver) {
+  if (state.gameOver || state.paused) {
     updateParticles(dt);
     return;
   }
@@ -431,6 +447,7 @@ function drawHUD() {
   ctx.fillText(`Score: ${state.score}`, 16, 30);
   ctx.fillText(`Leben: ${state.lives}`, 16, 58);
   ctx.fillText(`Welle: ${state.wave}`, 16, 86);
+  if (state.paused) ctx.fillText("Status: Pause", 16, 114);
 
   ctx.textAlign = "right";
   ctx.fillStyle = "#9ec8ff";
@@ -456,6 +473,19 @@ function drawGameOver() {
   ctx.restore();
 }
 
+function drawPauseOverlay() {
+  ctx.save();
+  ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#e8f3ff";
+  ctx.textAlign = "center";
+  ctx.font = '44px "Courier New", monospace';
+  ctx.fillText("PAUSE", canvas.width / 2, canvas.height / 2);
+  ctx.font = '20px "Courier New", monospace';
+  ctx.fillText("Klicke auf den Button, um fortzusetzen", canvas.width / 2, canvas.height / 2 + 38);
+  ctx.restore();
+}
+
 function render() {
   ctx.fillStyle = state.flashTimer > 0 ? "#182238" : "#060b14";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -467,6 +497,7 @@ function render() {
   drawHUD();
 
   if (state.gameOver) drawGameOver();
+  if (state.paused && !state.gameOver) drawPauseOverlay();
 }
 
 function gameLoop(timestamp) {

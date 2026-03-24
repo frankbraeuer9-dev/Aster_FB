@@ -39,6 +39,26 @@ h1 {
   font-size: 0.95rem;
 }
 
+.pause-button {
+  margin-bottom: 0.8rem;
+  padding: 0.45rem 1rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: rgba(12, 18, 32, 0.85);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pause-button:hover {
+  filter: brightness(1.1);
+}
+
+.pause-button[aria-pressed="true"] {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
 canvas {
   width: 100%;
   max-width: 900px;
